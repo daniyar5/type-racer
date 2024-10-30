@@ -39,3 +39,7 @@ input {
     color: yellow;
     font-weight: 400;
 }
+
+.words-number {
+    font-size: 1.2rem;
+}

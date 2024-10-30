@@ -102,7 +102,7 @@ function App() {
         disabled={!isTyping && seconds === 0}
       />
       <div className="info">
-        <p>Words typed: {words}</p>
+        <p className='words-number'>Words typed: {words}</p>
         <h1>
           {!isTyping && words > 0 ? (
             <> Finished: <span style={{ color: 'yellow' }}>{wpm}</span> wpm </>
