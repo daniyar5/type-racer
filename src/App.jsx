@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-
-const initial = "Effective project management requires you to have the right tools and techniques at hand, so you can stay organized and focused on what needs to be done."
+const initial = "Aligning items in a flex container."
 const splitted = initial.split(' ').map(word => [...word, ' '])
+console.log(splitted.flat())
 
 function App() {
   const [input, setInput] = useState('')
@@ -10,8 +10,11 @@ function App() {
   const [charIndex, setCharIndex] = useState(0)
   const [words, setWords] = useState(0)
   const [isTyping, setTyping] = useState(false)
-  const [seconds, setSeconds] = useState(80)
+  const [seconds, setSeconds] = useState(60)
   const [wpm, setWPM] = useState(0)
+  const [progress, setProgress] = useState(0)
+
+  const totalCharacters = splitted.flat().length
 
   useEffect(() => {
     let timer
@@ -26,7 +29,7 @@ function App() {
   }, [isTyping, seconds])
 
   const calculateWPM = () => {
-    const totalTime = (80 - seconds) / 60
+    const totalTime = (60 - seconds) / 60
     setWPM(Math.floor(words / totalTime))
   }
 
@@ -43,7 +46,6 @@ function App() {
     if (currentInput[currentInput.length - 1] === ' ') {
       if (charIndex === currentWord.length - 1) {
         if (wordIndex + 1 === splitted.length) {
-          console.log('were here')
           setTyping(false)
           calculateWPM()
           setInput('')
@@ -57,61 +59,79 @@ function App() {
     } else if (currentInput[charIndex] === currentWord[charIndex]) {
       setCharIndex(prev => prev + 1)
     }
+    
+    const currentCharacters = splitted.slice(0, wordIndex).flat().length + charIndex + 1
+    setProgress((currentCharacters / totalCharacters) * 100)
+
   }
 
   const handleClick = () => {
     setWords(0)
     setWordIndex(0)
     setCharIndex(0)
-    setSeconds(80)
+    setSeconds(60)
     setInput('')
     setTyping(false)
     setWPM(0)
+    setProgress(0)
   };
 
   return (
-    <div className='app'>
-      <div className="time">
-        <h1 style={{color: !isTyping && words > 0 ? 'lightblue': 'yellow' }}>{seconds} seconds</h1>
+    <div className="app-wrapper">
+      <div className='app'>
+        <div className="heading">
+          <h1>
+            {!isTyping && words > 0 ? (
+              <> Finished: <span style={{ color: 'aqua' }}>{wpm}</span> wpm </>
+            ) : (
+              <> {seconds} seconds left</>
+            )}
+          </h1>
+          <div className="words-number">
+            <p>Words typed: {words}</p>
+          </div>
+        </div>
+
+
+        <div className="progress">
+          <div className="object" style={{ left: `${progress}%`}} >
+            <img src="/images/progress-car.png" alt="" />
+          </div>
+        </div>
+
+        <div className="text">
+          {splitted.map((word, wordIdx) => (
+            <span key={wordIdx}>
+              {word.map((char, charIdx) => (
+                <span
+                  key={charIdx}
+                  style={{
+                    color:
+                      wordIdx < wordIndex ||
+                      (wordIdx === wordIndex && charIdx < charIndex)
+                        ? 'white'
+                        : 'rgb(157, 156, 156)'
+                  }}
+                >
+                  {char}
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
+
+        <div className="flexbox">
+          <input
+            type="text"
+            placeholder="Type the above text here when the race begins"
+            value={input}
+            onChange={handleChange}
+            disabled={!isTyping && seconds === 0}
+          />
+
+          <button onClick={handleClick} className='restart-btn'>Restart</button>
+        </div>
       </div>
-      <div className="text">
-        {splitted.map((word, wordIdx) => (
-          <span key={wordIdx}>
-            {word.map((char, charIdx) => (
-              <span
-                key={charIdx}
-                style={{
-                  color:
-                    wordIdx < wordIndex ||
-                    (wordIdx === wordIndex && charIdx < charIndex)
-                      ? 'white'
-                      : 'rgb(157, 156, 156)'
-                }}
-              >
-                {char}
-              </span>
-            ))}
-          </span>
-        ))}
-      </div>
-      <input
-        type="text"
-        placeholder="Type the above text here when the race begins"
-        value={input}
-        onChange={handleChange}
-        disabled={!isTyping && seconds === 0}
-      />
-      <div className="info">
-        <p className='words-number'>Words typed: {words}</p>
-        <h1>
-          {!isTyping && words > 0 ? (
-            <> Finished: <span style={{ color: 'yellow' }}>{wpm}</span> wpm </>
-          ) : (
-            ""
-          )}
-        </h1>
-      </div>
-      <button onClick={handleClick} className='restart-btn'>Restart</button>
     </div>
   );
 }

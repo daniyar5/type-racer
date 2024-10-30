@@ -1,14 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 .app{
-    max-width: 900px;
-    margin: 0 auto;
-    height: 100vh;
+    width: 850px;
     display:flex;
     color: white;
     flex-direction: column;
     justify-content: center;
-    gap: 30px;
+    gap: 65px;
     text-align: left;
+    padding: 50px 25px
+}
+
+.app-wrapper{
+    margin: 100px auto;
+    max-width: 1000px;
+    display: flex;
+    justify-content: center;
 }
 
 .text {
@@ -34,12 +40,44 @@ input {
     border-radius: 5px;
 }
 
-.time h1{
-    margin: 0;
-    color: yellow;
-    font-weight: 400;
+
+.words-number p{
+    font-size: 1.2rem;
+    margin: 10px 0 0;
 }
 
-.words-number {
-    font-size: 1.2rem;
+.heading h1{
+    margin: 0;
+    font-weight: 500;
+    font-size: 2.5rem;
+    color: yellow
 }
+
+.progress {
+    height: 5px;
+    background-color:rgb(157, 156, 156);
+    width: 100%;
+    position: relative;
+}
+
+.object{
+    position: absolute;
+    transition: left 0.3s ease-in-out;
+    width: 5px;
+    height: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.object img{
+    width: 80px;
+    height: 40px
+}
+
+
+.flexbox{
+    display: flex;
+    justify-content: space-between;
+}
+
+
